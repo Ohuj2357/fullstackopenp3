@@ -7,10 +7,10 @@ const app = express()
 
 
 morgan.token('data', request => {
-  if (request.method === "POST" || request.method === "PUT"){
+  if (request.method === 'POST' || request.method === 'PUT'){
     return JSON.stringify(request.body)
   }
-  return " "
+  return ' '
 })
 
 app.use(cors())
@@ -28,30 +28,30 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-    Person.find({}).then(persons => {
-      response.send(`<p>Phonebook has info for ${persons.length} people</p>${new Date()}<p>`)
-    })
+  Person.find({}).then(persons => {
+    response.send(`<p>Phonebook has info for ${persons.length} people</p>${new Date()}<p>`)
+  })
 })
 
 
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Person.findById(request.params.id)
-      .then(person => {
-        if (person) {
-          response.json(person)
-        } else {
-          response.status(404).end()
-        }
-      })
-      .catch(error => next(error))
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
